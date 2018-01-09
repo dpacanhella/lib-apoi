@@ -6,10 +6,14 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Iterator;
+import java.util.List;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletResponse;
 
+import br.com.apoi.teste.Linha;
+import br.com.apoi.teste.NomeCelula;
+import br.com.apoi.teste.Tabela;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.poi.ss.usermodel.Cell;
@@ -29,6 +33,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import br.com.apoi.domain.RowValues;
+import sun.tools.jconsole.Tab;
 
 @RestController
 @RequestMapping("/excel")
@@ -40,7 +45,7 @@ public class ExcelController {
 
     @PostMapping("/validate")
     public String importExcel(@RequestParam(value = "file", required = true) MultipartFile file,
-            HttpServletResponse response) {
+            HttpServletResponse response) throws IOException {
         Iterator<Row> iterator = null;
 
         XSSFWorkbook workbook = null;
@@ -60,6 +65,15 @@ public class ExcelController {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+
+
+
+        Linha templateLinha = new Linha();
+        templateLinha.getCelulas().add(new NomeCelula());
+//        templateLinha.getCelulas().add(new CpfCelula());
+
+        Tabela tabela = new Tabela(file.getInputStream(), templateLinha);
 
         while (iterator.hasNext()) {
 
