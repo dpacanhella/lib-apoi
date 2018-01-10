@@ -17,21 +17,23 @@ public class Linha {
     private boolean hasError = false;
     private List<String> errors = new ArrayList<String>();
 
-    public void validateFields(){
-        for (Celula celula : celulas) {
-            celula.validate(this);
-        }
+    public void validateFields() {
+
+        celulas.forEach(celula -> celula.validate(this));
+
     }
 
-    public static Linha createNewLine(Row currentRow, Linha template){
-        
+    public static Linha createNewLine(Row currentRow, Linha template) {
+
         Linha linha = new Linha();
-        for (Celula celula : template.getCelulas()) {
+
+        template.getCelulas().forEach(celula -> {
             String valor = CellAdapter.getValor(currentRow, celula.index());
             Celula novaCelula = celula.copy(valor);
             linha.row = currentRow;
             linha.getCelulas().add(novaCelula);
-        }
+        });
+
         return linha;
     }
 

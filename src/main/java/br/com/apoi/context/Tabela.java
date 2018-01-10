@@ -49,15 +49,12 @@ public class Tabela {
         styleYellow.setFillBackgroundColor(IndexedColors.YELLOW.getIndex());
         styleYellow.setFillPattern(CellStyle.ALIGN_CENTER);
 
-        for (Linha linha : linhas) {
-            for (Celula celula : linha.getCelulas()) {
-                boolean validate = celula.validate(linha);
-                if (!validate) {
-                    CellAdapter.tint(linha.getRow(), styleYellow, celula.index());
-                }
-            }
+        linhas.forEach(linha -> {
+            linha.getCelulas().stream().filter(celula -> !celula.validate(linha)).forEach(celula -> {
+                CellAdapter.tint(linha.getRow(), styleYellow, celula.index());
+            });
             escreverMessageDeErro(linha.getRow(), linha.getErrors());
-        }
+        });
 
     }
 
