@@ -1,38 +1,35 @@
-package br.com.apoi.teste;
+package br.com.apoi.domain;
 
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.DataFormatter;
+import org.apache.poi.ss.usermodel.Row;
+
+import br.com.apoi.context.Celula;
+import br.com.apoi.context.Linha;
 import lombok.Getter;
 import lombok.Setter;
-import org.apache.poi.ss.usermodel.*;
 
 @Getter
 @Setter
 public class NomeCelula implements Celula{
 
+    private final static String MESSAGE_NAME_REQUIRED = "Nome não preenchido";
 
     private Cell cell;
     private String valor;
     private boolean error;
     private String message;
 
-//
-//    public NomeCelula(Linha linha){
-//
-//    }
-
     @Override
     public int index() {
         return 1;
     }
 
-//    public String getContent(){
-//        DataFormatter formatter = new DataFormatter();
-//        formatter.formatCellValue(currentRow.getCell(get));
-//    }
-
     @Override
     public boolean validate(Linha linha) {
         if (valor.length() == 0) {
-            this.message = "Nome não preenchido";
+            this.message= MESSAGE_NAME_REQUIRED;
             this.error = true;
             linha.setHasError(true);
             linha.getErrors().add(this.message);

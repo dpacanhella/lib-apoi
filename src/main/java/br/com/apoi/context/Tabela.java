@@ -1,18 +1,21 @@
-package br.com.apoi.teste;
-
-import lombok.Getter;
-import lombok.Setter;
-import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.IndexedColors;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+package br.com.apoi.context;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Collectors;
+
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.IndexedColors;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
+import lombok.Getter;
+import lombok.Setter;
 
 @Getter
 @Setter
@@ -21,6 +24,7 @@ public class Tabela {
     private XSSFWorkbook workbook;
     private XSSFSheet content;
     private List<Linha> linhas = new ArrayList<>();
+    private Row currentRow;
 
     public Tabela(InputStream inputStream, Linha templateLinha) {
         try {
@@ -30,7 +34,8 @@ public class Tabela {
             iterator.next();
 
             while (iterator.hasNext()) {
-                Row currentRow = iterator.next();
+                currentRow = iterator.next();
+
                 linhas.add(Linha.criarNovaLinah(currentRow, templateLinha));
             }
 
@@ -39,8 +44,7 @@ public class Tabela {
         }
     }
 
-
-    public void validateFields(){
+    public void validateFields() {
         CellStyle styleYellow = workbook.createCellStyle();
         styleYellow.setFillBackgroundColor(IndexedColors.YELLOW.getIndex());
         styleYellow.setFillPattern(CellStyle.ALIGN_CENTER);
@@ -48,19 +52,25 @@ public class Tabela {
         for (Linha linha : linhas) {
             for (Celula celula : linha.getCelulas()) {
                 boolean validate = celula.validate(linha);
-                if(!validate){
+                if (!validate) {
                     celula.tint(linha.getRow(), styleYellow);
-                    escreverMessageDeErro(celula.getMessage());
                 }
             }
-
+            escreverMessageDeErro(linha.getRow(), linha.getErrors());
         }
 
     }
 
-    private void escreverMessageDeErro(String message) {
+    private void escreverMessageDeErro(Row row, List<String> errors) {
 
+        short lastCell = row.getLastCellNum();
+        Cell cell = row.createCell(lastCell);
+
+        String message = "Detalhes: " + errors.stream().collect(Collectors.joining(" / "));
+
+        if (message.length() != 0) {
+            cell.setCellValue(message);
+        }
     }
-
 
 }

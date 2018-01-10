@@ -1,4 +1,4 @@
-package br.com.apoi.teste;
+package br.com.apoi.context;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -14,15 +14,7 @@ public class Linha {
     private Row row;
     private List<Celula> celulas = new ArrayList<>();
     private boolean hasError = false;
-    private List<String> errors = new ArrayList<>();
-
-    public Linha(Row currentRow) {
-
-    }
-
-    public Linha() {
-
-    }
+    private List<String> errors = new ArrayList<String>();
 
     public void validateFields(){
         for (Celula celula : celulas) {
