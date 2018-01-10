@@ -1,11 +1,12 @@
 package br.com.apoi.context;
 
-import lombok.Getter;
-import lombok.Setter;
-import org.apache.poi.ss.usermodel.Row;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import org.apache.poi.ss.usermodel.Row;
+
+import lombok.Getter;
+import lombok.Setter;
 
 @Getter
 @Setter
@@ -22,10 +23,12 @@ public class Linha {
         }
     }
 
-    public static Linha criarNovaLinah(Row currentRow, Linha template){
+    public static Linha createNewLine(Row currentRow, Linha template){
+        
         Linha linha = new Linha();
         for (Celula celula : template.getCelulas()) {
-            Celula novaCelula = celula.copy(celula.extrairValor(currentRow));
+            String valor = CellAdapter.getValor(currentRow, celula.index());
+            Celula novaCelula = celula.copy(valor);
             linha.row = currentRow;
             linha.getCelulas().add(novaCelula);
         }

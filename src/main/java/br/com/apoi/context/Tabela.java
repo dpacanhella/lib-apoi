@@ -36,7 +36,7 @@ public class Tabela {
             while (iterator.hasNext()) {
                 currentRow = iterator.next();
 
-                linhas.add(Linha.criarNovaLinah(currentRow, templateLinha));
+                linhas.add(Linha.createNewLine(currentRow, templateLinha));
             }
 
         } catch (IOException e) {
@@ -53,7 +53,7 @@ public class Tabela {
             for (Celula celula : linha.getCelulas()) {
                 boolean validate = celula.validate(linha);
                 if (!validate) {
-                    celula.tint(linha.getRow(), styleYellow);
+                    CellAdapter.tint(linha.getRow(), styleYellow, celula.index());
                 }
             }
             escreverMessageDeErro(linha.getRow(), linha.getErrors());

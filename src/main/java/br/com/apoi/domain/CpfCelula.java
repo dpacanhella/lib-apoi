@@ -1,13 +1,10 @@
 package br.com.apoi.domain;
 
 import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.DataFormatter;
-import org.apache.poi.ss.usermodel.Row;
 
 import br.com.apoi.context.Celula;
 import br.com.apoi.context.Linha;
-import br.com.caelum.stella.validation.CPFValidator;
+import br.com.apoi.utils.ValidationUtils;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -38,7 +35,7 @@ public class CpfCelula implements Celula{
             return false;
         }
         
-        if (!validCPF(valor) && valor.length() != 0) {
+        if (!ValidationUtils.validCPF(valor) && valor.length() != 0) {
             this.message = MESSAGE_CPF_INVALID;
             this.error = true;
             linha.setHasError(true);
@@ -49,27 +46,10 @@ public class CpfCelula implements Celula{
     }
 
     @Override
-    public String extrairValor(Row currentRow) {
-        DataFormatter formatter = new DataFormatter();
-        return formatter.formatCellValue(currentRow.getCell(index()));
-    }
-
-    @Override
     public Celula copy(String string) {
         CpfCelula nomeCelula = new CpfCelula();
         nomeCelula.setValor(string);
         return nomeCelula;
     }
-
-    //TODO esse cara deve conhecer só o CELL nao o currentRow
-    @Override
-    public void tint(Row currentRow, CellStyle styleYellow) {
-        Cell cell = currentRow.getCell(index());
-        cell.setCellStyle(styleYellow);
-    }
     
-    private boolean validCPF(String cpfString) {
-        CPFValidator cpfValidator = new CPFValidator();
-        return cpfValidator.isEligible(cpfString);
-    }
 }
