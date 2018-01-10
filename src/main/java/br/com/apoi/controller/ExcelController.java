@@ -5,6 +5,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletResponse;
@@ -21,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import br.com.apoi.context.Celula;
 import br.com.apoi.context.Linha;
 import br.com.apoi.context.Tabela;
 import br.com.apoi.domain.CpfCelula;
@@ -36,7 +39,7 @@ public class ExcelController {
     private static Logger LOGGER = LoggerFactory.getLogger(ExcelController.class);
 
     private static final String NEW_FILE_NAME = "/Users/infra/Desktop/planilhas/";
-    
+
     @PostMapping("/validate")
     public String importExcel(@RequestParam(value = "file", required = true) MultipartFile file,
             HttpServletResponse response) throws IOException {
@@ -44,12 +47,15 @@ public class ExcelController {
         UUID uuid = UUID.randomUUID();
         String myRandom = uuid.toString().substring(0, 20);
 
+        List<Celula> celulas = new ArrayList<Celula>();
+        celulas.add(new NomeCelula());
+        celulas.add(new CpfCelula());
+        celulas.add(new EmailCelula());
+        celulas.add(new TelefoneCelula());
+        celulas.add(new ValorCelula());
+
         Linha templateLinha = new Linha();
-        templateLinha.getCelulas().add(new NomeCelula());
-        templateLinha.getCelulas().add(new CpfCelula());
-        templateLinha.getCelulas().add(new EmailCelula());
-        templateLinha.getCelulas().add(new TelefoneCelula());
-        templateLinha.getCelulas().add(new ValorCelula());
+        templateLinha.getCelulas().addAll(celulas);
 
         Tabela tabela = new Tabela(file.getInputStream(), templateLinha);
         tabela.validateFields();
