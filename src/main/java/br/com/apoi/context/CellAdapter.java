@@ -15,9 +15,12 @@ public abstract class CellAdapter {
         return formatter.formatCellValue(currentRow.getCell(index));
     }
 
-    public static void tint(Row currentRow, CellStyle styleYellow, int index) {
-        Cell cell = currentRow.getCell(index);
-        cell.setCellStyle(styleYellow);
+    public static void tint(Linha linha, CellStyle styleYellow, int index) {
+        System.out.println(linha);
+        Cell cell = linha.getRow().getCell(index);
+//        if (linha.getRow().getCell(index) != null) {
+            cell.setCellStyle(styleYellow);            
+//        }
     }
 
 }

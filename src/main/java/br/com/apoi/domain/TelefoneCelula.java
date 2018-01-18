@@ -4,15 +4,14 @@ import org.apache.poi.ss.usermodel.Cell;
 
 import br.com.apoi.context.Celula;
 import br.com.apoi.context.Linha;
+import br.com.apoi.enums.EnumValidations;
+import br.com.apoi.utils.ValidationUtils;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
 public class TelefoneCelula implements Celula{
-
-    private final static String MESSAGE_TEL_REQUIRED = "Telefone não preenchido";
-    private final static String MESSAGE_TEL_INVALID = "Telefone incorreto";
 
     private Cell cell;
     private String valor;
@@ -21,21 +20,23 @@ public class TelefoneCelula implements Celula{
 
     @Override
     public int index() {
-        return 4;
+        return 13;
     }
 
     @Override
     public boolean validate(Linha linha) {
         if (valor.length() == 0) {
-            this.message = MESSAGE_TEL_REQUIRED;
+            this.message = EnumValidations.MESSAGE_TEL_REQUIRED.getText();
             this.error = true;
             linha.setHasError(true);
             linha.getErrors().add(this.message);
             return false;
+        } else {
+            valor = ValidationUtils.removeSpecialCharacters(valor);
         }
         
-        if (!(valor.length() == 10 || valor.length() == 11) && valor.length() != 0) {
-            this.message = MESSAGE_TEL_INVALID;
+        if (!(valor.length() == 8 || valor.length() == 9) && valor.length() != 0) {
+            this.message = EnumValidations.MESSAGE_TEL_INVALID.getText();
             this.error = true;
             linha.setHasError(true);
             linha.getErrors().add(this.message);

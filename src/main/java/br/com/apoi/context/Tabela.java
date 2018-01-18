@@ -51,7 +51,7 @@ public class Tabela {
 
         linhas.forEach(linha -> {
             linha.getCelulas().stream().filter(celula -> !celula.validate(linha)).forEach(celula -> {
-                CellAdapter.tint(linha.getRow(), styleYellow, celula.index());
+                CellAdapter.tint(linha, styleYellow, celula.index());
             });
             escreverMessageDeErro(linha.getRow(), linha.getErrors());
         });

@@ -11,7 +11,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class EmailCelula implements Celula{
+public class CnpjCelula implements Celula{
 
     private Cell cell;
     private String valor;
@@ -20,21 +20,23 @@ public class EmailCelula implements Celula{
 
     @Override
     public int index() {
-        return 11;
+        return 1;
     }
 
     @Override
     public boolean validate(Linha linha) {
         if (valor.length() == 0) {
-            this.message = EnumValidations.MESSAGE_EMAIL_REQUIRED.getText();
+            this.message = EnumValidations.MESSAGE_CNPJ_REQUIRED.getText();
             this.error = true;
             linha.setHasError(true);
             linha.getErrors().add(this.message);
             return false;
+        } else {
+            valor = ValidationUtils.removeSpecialCharacters(valor);
         }
         
-        if (!ValidationUtils.validEmail(valor) && valor.length() != 0) {
-            this.message = EnumValidations.MESSAGE_EMAIL_INVALID.getText();
+        if (!ValidationUtils.validCNPJ(valor) && valor.length() != 0) {
+            this.message = EnumValidations.MESSAGE_CNPJ_INVALID.getText();
             this.error = true;
             linha.setHasError(true);
             linha.getErrors().add(this.message);
@@ -45,10 +47,9 @@ public class EmailCelula implements Celula{
 
     @Override
     public Celula copy(String string) {
-        EmailCelula nomeCelula = new EmailCelula();
+        CnpjCelula nomeCelula = new CnpjCelula();
         nomeCelula.setValor(string);
         return nomeCelula;
     }
-    
     
 }

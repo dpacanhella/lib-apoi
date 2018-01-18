@@ -26,11 +26,16 @@ import org.springframework.web.multipart.MultipartFile;
 import br.com.apoi.context.Celula;
 import br.com.apoi.context.Linha;
 import br.com.apoi.context.Tabela;
+import br.com.apoi.domain.CEPCelula;
+import br.com.apoi.domain.CnpjCelula;
 import br.com.apoi.domain.CpfCelula;
 import br.com.apoi.domain.EmailCelula;
+import br.com.apoi.domain.GeneroCelula;
 import br.com.apoi.domain.NomeCelula;
+import br.com.apoi.domain.StatusCelula;
 import br.com.apoi.domain.TelefoneCelula;
-import br.com.apoi.domain.ValorCelula;
+import br.com.apoi.domain.DDDCelula;
+import br.com.apoi.domain.DataNascimentoCelula;
 
 @RestController
 @RequestMapping("/excel")
@@ -48,11 +53,16 @@ public class ExcelController {
         String myRandom = uuid.toString().substring(0, 20);
 
         List<Celula> celulas = new ArrayList<Celula>();
+        celulas.add(new CnpjCelula());
         celulas.add(new NomeCelula());
+        celulas.add(new GeneroCelula());
+        celulas.add(new DataNascimentoCelula());
         celulas.add(new CpfCelula());
+        celulas.add(new CEPCelula());
         celulas.add(new EmailCelula());
+        celulas.add(new DDDCelula());
         celulas.add(new TelefoneCelula());
-        celulas.add(new ValorCelula());
+        celulas.add(new StatusCelula());
 
         Linha templateLinha = new Linha();
         templateLinha.getCelulas().addAll(celulas);
